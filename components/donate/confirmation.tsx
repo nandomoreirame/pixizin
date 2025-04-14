@@ -45,7 +45,7 @@ export default function ConfirmationPage() {
               <p className="text-sm font-medium text-gray-700 mb-3">Escaneie o QR Code com seu aplicativo bancário:</p>
               <div className="bg-white p-4 border rounded-md shadow-sm">
                 <Image
-                  src="/placeholder.svg?height=200&width=200"
+                  src="/qr-demo.png"
                   alt="QR Code PIX"
                   width={200}
                   height={200}
