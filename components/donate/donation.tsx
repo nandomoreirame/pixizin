@@ -86,7 +86,7 @@ function DonationForm() {
 
       <div className="pt-4">
         <Link
-          href={`/confirmar?valor=${finalAmount}`}
+          href={`/doar?valor=${finalAmount}`}
           className={`w-full h-14 flex items-center justify-center rounded-md text-white text-lg font-medium transition-colors ${
             finalAmount > 0 ? "bg-green-600 hover:bg-green-700" : "bg-gray-300 cursor-not-allowed"
           }`}
