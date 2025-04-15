@@ -29,7 +29,6 @@ export default function ConfirmationPage() {
         })
         .then((json) => json)
 
-      console.log({ response })
       setPixCode(response?.qrcode)
       setPixCodeBase64(response?.qrcode_base64)
       setTransactionId(response?.transactionId as string)
