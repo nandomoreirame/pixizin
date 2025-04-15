@@ -1,13 +1,13 @@
-"use client"
+'use client'
 
-import type React from "react"
+import type React from 'react'
 
-import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { HeartHandshake } from "lucide-react"
-import Link from "next/link"
-import { useState } from "react"
+import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { HeartHandshake } from 'lucide-react'
+import Link from 'next/link'
+import { useState } from 'react'
 
 export default function DonationPage() {
   return (
@@ -34,13 +34,13 @@ export default function DonationPage() {
 
 function DonationForm() {
   const [selectedAmount, setSelectedAmount] = useState<number | null>(null)
-  const [customAmount, setCustomAmount] = useState("")
+  const [customAmount, setCustomAmount] = useState('')
 
   const presetAmounts = [10, 25, 50, 100]
 
   const handleAmountSelect = (amount: number) => {
     setSelectedAmount(amount)
-    setCustomAmount("")
+    setCustomAmount('')
   }
 
   const handleCustomAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -58,8 +58,12 @@ function DonationForm() {
           {presetAmounts.map((amount) => (
             <Button
               key={amount}
-              variant={selectedAmount === amount ? "default" : "outline"}
-              className={`h-16 text-lg ${selectedAmount === amount ? "bg-green-600 hover:bg-green-700" : "hover:border-green-600 hover:text-green-600"}`}
+              variant={selectedAmount === amount ? 'default' : 'outline'}
+              className={`h-16 text-lg ${
+                selectedAmount === amount
+                  ? 'bg-green-600 hover:bg-green-700'
+                  : 'hover:border-green-600 hover:text-green-600'
+              }`}
               onClick={() => handleAmountSelect(amount)}
             >
               R$ {amount}
@@ -88,10 +92,9 @@ function DonationForm() {
         <Link
           href={`/doar?valor=${finalAmount}`}
           className={`w-full h-14 flex items-center justify-center rounded-md text-white text-lg font-medium transition-colors ${
-            finalAmount > 0 ? "bg-green-600 hover:bg-green-700" : "bg-gray-300 cursor-not-allowed"
+            finalAmount > 0 ? 'bg-green-600 hover:bg-green-700' : 'bg-gray-300 cursor-not-allowed'
           }`}
           aria-disabled={finalAmount <= 0}
-          onClick={(e) => finalAmount <= 0 && e.preventDefault()}
         >
           Doar R$ {finalAmount.toFixed(2)} com PIX
         </Link>

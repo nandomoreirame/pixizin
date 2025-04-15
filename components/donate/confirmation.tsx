@@ -1,28 +1,51 @@
-"use client"
+'use client'
 
-import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
-import { ArrowLeft, Check, Copy } from "lucide-react"
-import Image from "next/image"
-import Link from "next/link"
-import { useSearchParams } from "next/navigation"
-import { useState } from "react"
+import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
+import { ArrowLeft, Check, Copy } from 'lucide-react'
+import Image from 'next/image'
+import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
 
 export default function ConfirmationPage() {
   const searchParams = useSearchParams()
-  const valor = searchParams.get("valor") || "0"
+  const valor = searchParams.get('valor') || '0'
   const [copied, setCopied] = useState(false)
+  const [pixCode, setPixCode] = useState('')
+  const [pixCodeBase64, setPixCodeBase64] = useState('')
+  const [transactionId, setTransactionId] = useState('')
+  const [loading, setLoading] = useState(true)
 
-  // Exemplo de código PIX (em produção, seria gerado dinamicamente)
-  const pixCode =
-    "00020126580014BR.GOV.BCB.PIX0136example@domain.com5204000053039865802BR5913Organization6009SAO PAULO62070503***6304E2CA"
-  const transactionId = "DOA-" + Math.random().toString(36).substring(2, 8).toUpperCase()
+  useEffect(() => {
+    const handleDonate = async (amount: number) => {
+      setLoading(true)
+      const response = await fetch(process.env.NEXT_PUBLIC_API_URL + `/pagar`, {
+        method: 'POST',
+        body: JSON.stringify({ amount }),
+      })
+        .then((res) => {
+          return res.json()
+        })
+        .then((json) => json)
+
+      console.log({ response })
+      setPixCode(response?.qrcode)
+      setPixCodeBase64(response?.qrcode_base64)
+      setTransactionId(response?.transactionId as string)
+      setLoading(false)
+    }
+
+    handleDonate(Number.parseFloat(valor))
+  }, [valor])
 
   const handleCopy = () => {
     navigator.clipboard.writeText(pixCode)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
   }
+
+  if (loading) return <div>Carregando...</div>
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
@@ -45,11 +68,11 @@ export default function ConfirmationPage() {
               <p className="text-sm font-medium text-gray-700 mb-3">Escaneie o QR Code com seu aplicativo bancário:</p>
               <div className="bg-white p-4 border rounded-md shadow-sm">
                 <Image
-                  src="/qr-demo.png"
+                  src={pixCodeBase64 ? `data:image/jpeg;base64,${pixCodeBase64}` : '/qr-demo.png'}
                   alt="QR Code PIX"
                   width={200}
                   height={200}
-                  className="mx-auto"
+                  className="w-full h-auto"
                 />
               </div>
             </div>
@@ -65,7 +88,7 @@ export default function ConfirmationPage() {
                   onClick={handleCopy}
                 >
                   {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-                  <span className="ml-1">{copied ? "Copiado!" : "Copiar"}</span>
+                  <span className="ml-1">{copied ? 'Copiado!' : 'Copiar'}</span>
                 </Button>
               </div>
             </div>
